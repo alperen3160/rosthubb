@@ -2188,91 +2188,85 @@ function library:AddWindow(text)
 			_PARENT:TweenSize(UDim2.fromOffset(_PARENT.AbsoluteSize.X,  LIST.AbsoluteContentSize.Y + 15),Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0, true) 
 			UpdateMainSize(nil,true)
 		end
-function inside:AddButton(Text, Callback)
-    Callback = Callback or function() end
-    Text = Text or 'Not Defined'
+		function inside:AddButton(Text,Callback)
+			Callback = Callback or function() end
+			Text=Text or 'Not Defined'
+			local TemplateButton = Instance.new("Frame")
+			local TextLabel = Instance.new("TextLabel")
+			local Interactive = Instance.new("TextButton")
+			local UICorner = Instance.new("UICorner")
 
-    local TemplateButton = Instance.new("Frame")
-    TemplateButton.Name = "TemplateButton"
-    TemplateButton.Parent = HOLDER_2
-    TemplateButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-    TemplateButton.BorderSizePixel = 0
-    TemplateButton.Position = UDim2.new(0.0430313908, 0, 0, 0)
-    TemplateButton.Size = UDim2.new(0, 243, 0, 21)
-    TemplateButton.ZIndex = 14
-    TemplateButton.ClipsDescendants = true
+			TemplateButton.Name = "TemplateButton"
+			TemplateButton.Parent = HOLDER_2
+			TemplateButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+			TemplateButton.BorderSizePixel = 0
+			TemplateButton.Position = UDim2.new(0.0430313908, 0, 0, 0)
+			TemplateButton.Size = UDim2.new(0, 243, 0, 21)
+			TemplateButton.ZIndex = 14
+			TemplateButton.ClipsDescendants = true
+			TextLabel.Parent = TemplateButton
+			TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+			TextLabel.BackgroundTransparency = 1.000
+			TextLabel.BorderSizePixel = 0
+			TextLabel.Position = UDim2.new(0, 0, 0, 0)
+			TextLabel.Size = UDim2.new(0,243,0,19)
+			TextLabel.ZIndex = 15
+            TextLabel.Text=Text
+			TextLabel.Font = Enum.Font.SourceSansBold
+			TextLabel.TextColor3 = Color3.fromRGB(84, 84, 84)
+			TextLabel.TextSize = 17.000
 
-    local TextLabel = Instance.new("TextLabel")
-    TextLabel.Parent = TemplateButton
-    TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    TextLabel.BackgroundTransparency = 1
-    TextLabel.BorderSizePixel = 0
-    TextLabel.Position = UDim2.new(0, 0, 0, 0)
-    TextLabel.Size = UDim2.new(0, 243, 0, 19)
-    TextLabel.ZIndex = 15
-    TextLabel.Text = Text
-    TextLabel.Font = Enum.Font.SourceSansBold
-    TextLabel.TextColor3 = Color3.fromRGB(84, 84, 84)
-    TextLabel.TextSize = 17
+			Interactive.Name = "Interactive"
+			Interactive.Parent = TemplateButton
+			Interactive.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+			Interactive.BackgroundTransparency = 1.000
+			Interactive.BorderSizePixel = 0
+			Interactive.Position = UDim2.new(0, 0, 0, 0)
+			Interactive.Size = UDim2.new(0,243,0,21)
+			Interactive.ZIndex = 20
+			Interactive.Font = Enum.Font.SourceSans
+			Interactive.Text = ""
+			Interactive.TextColor3 = Color3.fromRGB(0, 0, 0)
+			Interactive.TextSize = 18.000
+			--Interactive.ClipsDescendants = true
+			UICorner.CornerRadius = UDim.new(0, 4)
+			UICorner.Parent = TemplateButton
+			local UIGradient = Instance.new("UIGradient");
+			local UIStroke = Instance.new('UIStroke');
 
-    local Interactive = Instance.new("TextButton")
-    Interactive.Name = "Interactive"
-    Interactive.Parent = TemplateButton
-    Interactive.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    Interactive.BackgroundTransparency = 1
-    Interactive.BorderSizePixel = 0
-    Interactive.Position = UDim2.new(0, 0, 0, 0)
-    Interactive.Size = UDim2.new(0, 243, 0, 21)
-    Interactive.ZIndex = 20
-    Interactive.Font = Enum.Font.SourceSans
-    Interactive.Text = ""
-    Interactive.TextColor3 = Color3.fromRGB(0, 0, 0)
-    Interactive.TextSize = 18
-    Interactive.Active = true
-    Interactive.Visible = true
+			UIStroke.Parent= TemplateButton;
+			UIStroke.Color = Color3.fromRGB(52,52,52);
+			UIStroke.LineJoinMode = Enum.LineJoinMode.Round;
+			UIStroke.Thickness = 1;
+			UIStroke.Transparency = 0;
+			UIStroke.Name = 'UIStroke';
 
-    local UICorner = Instance.new("UICorner")
-    UICorner.CornerRadius = UDim.new(0, 4)
-    UICorner.Parent = TemplateButton
+			UIGradient.Color = ColorSequence.new{ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 255, 255)), ColorSequenceKeypoint.new(1.00, Color3.fromRGB(180, 180, 180))}
+			UIGradient.Parent = UIStroke
 
-    local UIStroke = Instance.new("UIStroke")
-    UIStroke.Parent = TemplateButton
-    UIStroke.Color = Color3.fromRGB(52, 52, 52)
-    UIStroke.LineJoinMode = Enum.LineJoinMode.Round
-    UIStroke.Thickness = 1
-    UIStroke.Transparency = 0
-    UIStroke.Name = "UIStroke"
+			Interactive.MouseButton1Click:Connect(function()
+				spawn(function()
+					pcall(function()
+						Callback()
+					end)
+				end)
+			end)
+			SECTIONHOLDER.Size = UDim2.fromOffset(SECTIONHOLDER.AbsoluteSize.X,  SECTION2UILIB.AbsoluteContentSize.Y + 8) + UDim2.new(0,0,0,23)
+			_PARENT.Size = UDim2.new(_PARENT.Size.X.Scale, _PARENT.Size.X.Offset , 0 ,LIST.AbsoluteContentSize.Y + 15);
+			SECTIONHOLDER:TweenSize(UDim2.fromOffset(SECTIONHOLDER.AbsoluteSize.X,  SECTION2UILIB.AbsoluteContentSize.Y + 42),Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0, true) 
+			wait()
+			_PARENT:TweenSize(UDim2.fromOffset(_PARENT.AbsoluteSize.X,  LIST.AbsoluteContentSize.Y + 15),Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0, true) 
+			UpdateMainSize(nil,true)
+		end			
+		AutoFit(SECTIONHOLDER,SECTION2UILIB)
+		_PARENT:TweenSize(UDim2.fromOffset(_PARENT.AbsoluteSize.X,  LIST.AbsoluteContentSize.Y + 15),Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0, true) 
 
-    local UIGradient = Instance.new("UIGradient")
-    UIGradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0.00, Color3.fromRGB(255, 255, 255)),
-        ColorSequenceKeypoint.new(1.00, Color3.fromRGB(180, 180, 180))
-    }
-    UIGradient.Parent = TemplateButton  -- Burada UIStroke değil, TemplateButton olmalı
+		return inside
+	end
 
-    Interactive.MouseButton1Click:Connect(function()
-        local success, err = pcall(function()
-            Callback()
-
-            -- UI boyutlandırma güncellemeleri
-            SECTIONHOLDER.Size = UDim2.fromOffset(SECTIONHOLDER.AbsoluteSize.X, SECTION2UILIB.AbsoluteContentSize.Y + 8) + UDim2.new(0, 0, 0, 23)
-            _PARENT.Size = UDim2.new(_PARENT.Size.X.Scale, _PARENT.Size.X.Offset, 0, LIST.AbsoluteContentSize.Y + 15)
-            SECTIONHOLDER:TweenSize(UDim2.fromOffset(SECTIONHOLDER.AbsoluteSize.X, SECTION2UILIB.AbsoluteContentSize.Y + 42), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0, true)
-            _PARENT:TweenSize(UDim2.fromOffset(_PARENT.AbsoluteSize.X, LIST.AbsoluteContentSize.Y + 15), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0, true)
-            UpdateMainSize(nil, true)
-        end)
-        if not success then
-            warn("AddButton callback hatası: ", err)
-        end
-    end)
-
-    AutoFit(SECTIONHOLDER, SECTION2UILIB)
-    _PARENT:TweenSize(UDim2.fromOffset(_PARENT.AbsoluteSize.X, LIST.AbsoluteContentSize.Y + 15), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0, true)
-
-    return inside
+	return sec
 end
 
-return sec
 
 
 
